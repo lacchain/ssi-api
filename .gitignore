@@ -1,0 +1,6 @@
+node_modules
+.idea
+*.iml
+mongo
+dump.rdb
+k8s

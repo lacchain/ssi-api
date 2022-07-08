@@ -1,0 +1,810 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "SSI API",
+    "description": "Self-Sovereign Identity API for management of Trusted Lists & Verifiable Credentials"
+  },
+  "host": "localhost:8080",
+  "basePath": "/",
+  "schemes": [
+    "http"
+  ],
+  "securityDefinitions": {
+    "Bearer": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
+    }
+  },
+  "paths": {
+    "/pki/pkd": {
+      "get": {
+        "tags": [
+          "Public Key Directory"
+        ],
+        "summary": "List PKDs",
+        "description": "List all deployed Public Key Directories",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": ["0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A", "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"]
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/pkd/{address}/entities": {
+      "get": {
+        "tags": [
+          "Public Key Directory"
+        ],
+        "summary": "List the entities of a PKD",
+        "description": "List all the entities registered in the specified Public Key Directory",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "address",
+          "description": "The PKD address",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": [{
+                "address": "Entity address",
+                "did": "Entity DID",
+                "expires": "Entity expiration date",
+                "status": "Entity status (active|revoked)"
+              }]
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/pkd/deploy": {
+      "post": {
+        "tags": [
+          "Public Key Directory"
+        ],
+        "summary": "Deploy PKD",
+        "description": "Deploy a new Public Key Directory contract",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "address": "The PKD address",
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/pkd/{address}/register": {
+      "post": {
+        "tags": [
+          "Public Key Directory"
+        ],
+        "summary": "Register an entity in the PKD",
+        "description": "Register a new entity in the Public Key Directory",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The PKD address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+          }, {
+            "name": "body",
+            "description": "The entity information",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "The entity address (useful when is different from DID, for example TL address)",
+                  "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A"
+                },
+                "did": {
+                  "type": "string",
+                  "description": "The DID of the entity",
+                  "default": "did:lac:main:0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A"
+                },
+                "expires": {
+                  "type": "string",
+                  "description": "The expiration date in UNIX time - seconds",
+                  "default": "1757247663"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "404": {
+            "description": "PKD not found or invalid address"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/pkd/{address}/revoke/{entity}": {
+      "delete": {
+        "tags": [
+          "Public Key Directory"
+        ],
+        "summary": "Revoke an entity in the PKD",
+        "description": "Revoke an entity registered in the Public Key Directory",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The PKD address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+          }, {
+            "name": "entity",
+            "description": "The Entity address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621C"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "404": {
+            "description": "PKD not found or invalid address"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+
+    "/pki/tl": {
+      "get": {
+        "tags": [
+          "Trusted List"
+        ],
+        "summary": "List TLs",
+        "description": "List all deployed Trusted Lists",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": [{
+                "address": "The entity address",
+                "parent": "The address of the parent TL or PKD",
+                "name": "The name of the entity"
+              }]
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/tl/{address}/entities": {
+      "get": {
+        "tags": [
+          "Trusted List"
+        ],
+        "summary": "List the entities of a TL",
+        "description": "List all the entities registered in the specified Trusted List",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "address",
+          "description": "The TL address",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": [{
+                "address": "Entity address",
+                "did": "Entity DID",
+                "expires": "Entity expiration date",
+                "status": "Entity status (active|revoked)"
+              }]
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/tl/deploy": {
+      "post": {
+        "tags": [
+          "Trusted List"
+        ],
+        "summary": "Deploy TL",
+        "description": "Deploy a new Trusted List contract",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "body",
+          "description": "The entity information",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "parent": {
+                "type": "string",
+                "description": "The parent (TL or PKD) address",
+                "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB501d"
+              },
+              "name": {
+                "type": "string",
+                "description": "The name of the entity",
+                "default": "Trusted List 1"
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "address": "The TL address",
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/tl/{address}/register": {
+      "post": {
+        "tags": [
+          "Trusted List"
+        ],
+        "summary": "Register an entity in the TL",
+        "description": "Register a new entity in the Public Key Directory",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The TL address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D6313"
+          }, {
+            "name": "body",
+            "description": "The entity information",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "address": {
+                  "type": "string",
+                  "description": "The entity address (useful when is different from DID, for example TL address)",
+                  "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D671A"
+                },
+                "did": {
+                  "type": "string",
+                  "description": "The DID of the entity",
+                  "default": "did:lac:main:0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of the entity",
+                  "default": "Entity 1 Inc."
+                },
+                "expires": {
+                  "type": "number",
+                  "description": "The expiration date in UNIX time - seconds",
+                  "default": 1757247663
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "404": {
+            "description": "TL not found or invalid address"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/pki/tl/{address}/revoke/{entity}": {
+      "delete": {
+        "tags": [
+          "Trusted List"
+        ],
+        "summary": "Revoke an entity in the TL",
+        "description": "Revoke an entity registered in the Trusted List",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The TL address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x6967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+          }, {
+            "name": "entity",
+            "description": "The Entity address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x6967b9b16024Ffc06Ef25Af6D77de00c5C5D621C"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "404": {
+            "description": "TL not found or invalid address"
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+
+    "/registry/credentials/deploy": {
+      "post": {
+        "tags": [
+          "Credentials Registry"
+        ],
+        "summary": "Deploy Credentials Registry",
+        "description": "Deploys a smart contract that acts as a Credentials Registry",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "address": "The Credentials Registry address",
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/registry/verifier/deploy": {
+      "post": {
+        "tags": [
+          "Credentials Registry"
+        ],
+        "summary": "Deploy Claims Verifier",
+        "description": "Deploy a Claims Verifier smart contract based on EIP-712",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "body",
+          "description": "The entity information",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "credentialsRegistry": {
+                "type": "string",
+                "description": "The Credentials Registry address",
+                "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB301A"
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "address": "The Claims Verifier address",
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/registry/verifier/{address}/issuer": {
+      "put": {
+        "tags": [
+          "Credentials Registry"
+        ],
+        "summary": "Register an new issuer",
+        "description": "Register a new issuer in the Claims Verifier smart contract",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "address",
+          "description": "The Claims Verifier address",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "default": "0x6967b9b16024Ffc06ED25Af6D77de00c5C5D6351"
+        },{
+          "name": "body",
+          "description": "The entity information",
+          "in": "body",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "issuer": {
+                "type": "string",
+                "description": "The issuer address",
+                "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB301A"
+              }
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+
+    "/vc": {
+      "get": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "List of issued VC",
+        "description": "Get the list of Verifiable Credentials issued",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Status",
+            "examples": {
+              "application/json": {
+                "id": "Credential identifier",
+                "status": "Credential status (active, revoked)",
+                "claimsVerifier": "The Claims Verifier address"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Issue a Verifiable Credential",
+        "description": "Generate, sign and register a Verifiable Credential in Claims Verifier smart contract",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "description": "",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "claimsVerifier": {
+                  "type": "string",
+                  "description": "The Claims Verifier smart contract address where will be registered the VC",
+                  "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D671A"
+                },
+                "trustedList": {
+                  "type": "string",
+                  "description": "The address of the TL that will be used to verify the credential Root of Trust",
+                  "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A"
+                },
+                "data": {
+                  "type": "object",
+                  "description": "The credential information",
+                  "default": {
+                    "expirationDate": "2024-06-22T16:04:16.297Z",
+                    "administeringCentre": "Mexico City Vaccination Center 1",
+                    "healthProfessional": "Juan Perez",
+                    "country": "Mexico",
+                    "subject": {
+                      "did": "did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
+                      "givenName": "Sergio",
+                      "familyName": "Ceron",
+                      "gender": "male",
+                      "birthDate": "1989-01-01T16:04:16.297Z"
+                    },
+                    "vaccine": {
+                      "code": "J07BX03",
+                      "batchNumber": "034343",
+                      "dose": "1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "id": "VC identifier"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/vc/{id}": {
+      "get": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Get full VC",
+        "description": "Gets the full Verifiable Credential",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The VC identifier",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "62c7ce0a7f3b503f0d33d1a2"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "id": "Credential identifier",
+                "status": "Credential status (active, revoked)",
+                "claimsVerifier": "The Claims Verifier address",
+                "credential": "The Verifiable Credential data",
+                "createdAt": "Creation timestamp",
+                "revokedAt": "Revocation timestamp"
+              }
+            }
+          },
+          "404": {
+            "description": "VC not found"
+          },
+          "500": {
+            "description": "Error",
+            "examples": {
+              "application/json": false
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Revoke a VC",
+        "description": "Revoke a Verifiable Credential issued by the current user",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "description": "The VC identifier",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "62c7ce0a7f3b503f0d33d1a2"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "404": {
+            "description": "VC not found"
+          },
+          "500": {
+            "description": "Error",
+            "examples": {
+              "application/json": false
+            }
+          }
+        }
+      }
+    }
+  }
+}

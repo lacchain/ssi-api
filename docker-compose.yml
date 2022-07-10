@@ -1,0 +1,23 @@
+version: '3'
+services:
+  mongo:
+    container_name: mongo
+    image: mongo
+    volumes:
+      - ./data:/data/db
+    ports:
+      - '27017:27017'
+  app:
+    container_name: app
+    restart: always
+    image: ghcr.io/lacchain/ssi-api:latest
+    ports:
+      - '8080:8080'
+    environment:
+      MONGODB_URL: "mongodb://mongo:27017/ssi-api"
+      ACCOUNT_ADDRESS: "0xda3c5b1ab4b6ad066b99d8df05cd9fe5b5161380"
+      ACCOUNT_PRIVATE_ENCRYPTION_KEY: "b314769a3f6cbf869f0b6fe6cb6508638128956be392f18afe2ce8ea8b73a84d276523d35d41a983cddf20b5c6ed0f25a4c8a493a2d7b052f841f6d385337a0d"
+      ACCOUNT_PRIVATE_KEY: "260f83f92bff35e94e7e652d9c78b2636b813b82c9a1e4e5c5d8c79cf78c6c78"
+      ACCOUNT_PUBLIC_ENCRYPTION_KEY: "0x276523d35d41a983cddf20b5c6ed0f25a4c8a493a2d7b052f841f6d385337a0d"
+    links:
+      - mongo

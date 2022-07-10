@@ -13,6 +13,7 @@ export default class VCRouter extends Router {
   init() {
     this.get( '/', 'PUBLIC', this.list );
     this.get( '/:id', 'PUBLIC', this.getVC );
+    this.post( '/verify', 'PUBLIC', this.verify );
     this.post( '/', 'PUBLIC', this.issue );
     this.delete( '/:id', 'PUBLIC', this.revoke );
   }
@@ -44,6 +45,10 @@ export default class VCRouter extends Router {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildVaccinationCredential( config.account, data, trustedList );
     return await vcService.issue( credential, claimsVerifier );
+  }
+
+  async verify( req ){
+    return vcService.verify( req.body );
   }
 
   async revoke( req ) {

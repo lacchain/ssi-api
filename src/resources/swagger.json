@@ -37,7 +37,10 @@
           "200": {
             "description": "Success",
             "examples": {
-              "application/json": ["0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A", "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"]
+              "application/json": [
+                "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A",
+                "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+              ]
             }
           },
           "500": {
@@ -60,24 +63,28 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "name": "address",
-          "description": "The PKD address",
-          "in": "path",
-          "required": true,
-          "type": "string",
-          "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
-        }],
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The PKD address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
             "examples": {
-              "application/json": [{
-                "address": "Entity address",
-                "did": "Entity DID",
-                "expires": "Entity expiration date",
-                "status": "Entity status (active|revoked)"
-              }]
+              "application/json": [
+                {
+                  "address": "Entity address",
+                  "did": "Entity DID",
+                  "expires": "Entity expiration date",
+                  "status": "Entity status (active|revoked)"
+                }
+              ]
             }
           },
           "500": {
@@ -139,7 +146,8 @@
             "required": true,
             "type": "string",
             "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
-          }, {
+          },
+          {
             "name": "body",
             "description": "The entity information",
             "in": "body",
@@ -206,7 +214,8 @@
             "required": true,
             "type": "string",
             "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
-          }, {
+          },
+          {
             "name": "entity",
             "description": "The Entity address",
             "in": "path",
@@ -233,7 +242,6 @@
         }
       }
     },
-
     "/pki/tl": {
       "get": {
         "tags": [
@@ -253,11 +261,13 @@
           "200": {
             "description": "Success",
             "examples": {
-              "application/json": [{
-                "address": "The entity address",
-                "parent": "The address of the parent TL or PKD",
-                "name": "The name of the entity"
-              }]
+              "application/json": [
+                {
+                  "address": "The entity address",
+                  "parent": "The address of the parent TL or PKD",
+                  "name": "The name of the entity"
+                }
+              ]
             }
           },
           "500": {
@@ -280,24 +290,28 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "name": "address",
-          "description": "The TL address",
-          "in": "path",
-          "required": true,
-          "type": "string",
-          "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
-        }],
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The TL address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Success",
             "examples": {
-              "application/json": [{
-                "address": "Entity address",
-                "did": "Entity DID",
-                "expires": "Entity expiration date",
-                "status": "Entity status (active|revoked)"
-              }]
+              "application/json": [
+                {
+                  "address": "Entity address",
+                  "did": "Entity DID",
+                  "expires": "Entity expiration date",
+                  "status": "Entity status (active|revoked)"
+                }
+              ]
             }
           },
           "500": {
@@ -320,27 +334,29 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "name": "body",
-          "description": "The entity information",
-          "in": "body",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "parent": {
-                "type": "string",
-                "description": "The parent (TL or PKD) address",
-                "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB501d"
-              },
-              "name": {
-                "type": "string",
-                "description": "The name of the entity",
-                "default": "Trusted List 1"
+        "parameters": [
+          {
+            "name": "body",
+            "description": "The entity information",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "parent": {
+                  "type": "string",
+                  "description": "The parent (TL or PKD) address",
+                  "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB501d"
+                },
+                "name": {
+                  "type": "string",
+                  "description": "The name of the entity",
+                  "default": "Trusted List 1"
+                }
               }
             }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -379,7 +395,8 @@
             "required": true,
             "type": "string",
             "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D6313"
-          }, {
+          },
+          {
             "name": "body",
             "description": "The entity information",
             "in": "body",
@@ -451,7 +468,8 @@
             "required": true,
             "type": "string",
             "default": "0x6967b9b16024Ffc06Ef25Af6D77de00c5C5D621B"
-          }, {
+          },
+          {
             "name": "entity",
             "description": "The Entity address",
             "in": "path",
@@ -478,7 +496,6 @@
         }
       }
     },
-
     "/registry/credentials/deploy": {
       "post": {
         "tags": [
@@ -524,22 +541,24 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "name": "body",
-          "description": "The entity information",
-          "in": "body",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "credentialsRegistry": {
-                "type": "string",
-                "description": "The Credentials Registry address",
-                "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB301A"
+        "parameters": [
+          {
+            "name": "body",
+            "description": "The entity information",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "credentialsRegistry": {
+                  "type": "string",
+                  "description": "The Credentials Registry address",
+                  "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB301A"
+                }
               }
             }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -570,29 +589,32 @@
         "produces": [
           "application/json"
         ],
-        "parameters": [{
-          "name": "address",
-          "description": "The Claims Verifier address",
-          "in": "path",
-          "required": true,
-          "type": "string",
-          "default": "0x6967b9b16024Ffc06ED25Af6D77de00c5C5D6351"
-        },{
-          "name": "body",
-          "description": "The entity information",
-          "in": "body",
-          "required": true,
-          "schema": {
-            "type": "object",
-            "properties": {
-              "issuer": {
-                "type": "string",
-                "description": "The issuer address",
-                "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB301A"
+        "parameters": [
+          {
+            "name": "address",
+            "description": "The Claims Verifier address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x6967b9b16024Ffc06ED25Af6D77de00c5C5D6351"
+          },
+          {
+            "name": "body",
+            "description": "The entity information",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "issuer": {
+                  "type": "string",
+                  "description": "The issuer address",
+                  "default": "0xF49ECE7f8aaCfba94EB5f7b296Ad7175d9BB301A"
+                }
               }
             }
           }
-        }],
+        ],
         "responses": {
           "200": {
             "description": "Success",
@@ -608,7 +630,6 @@
         }
       }
     },
-
     "/vc": {
       "get": {
         "tags": [
@@ -796,6 +817,101 @@
           },
           "404": {
             "description": "VC not found"
+          },
+          "500": {
+            "description": "Error",
+            "examples": {
+              "application/json": false
+            }
+          }
+        }
+      }
+    },
+    "/vc/verify": {
+      "post": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Verify a VC",
+        "description": "Perform a blockchain & trusted verification of a Verifiable Credential",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [{
+          "name": "body",
+          "description": "The JSON-LD Verifiable Credential",
+          "in": "body",
+          "required": true,
+          "type": "object",
+          "default": {
+            "@context": [
+              "https://www.w3.org/2018/credentials/v1",
+              "https://credentials-library.lacchain.net/credentials/trusted/v1",
+              "https://w3id.org/security/bbs/v1",
+              "https://w3id.org/vaccination/v1"
+            ],
+            "type":[
+              "VerifiableCredential",
+              "VaccinationCertificate"
+            ],
+            "id":"urn:uuid:8943777a-d376-45ca-90b4-572b7592fc38",
+            "name":"COVID-19",
+            "issuer":"did:lac:main:0xdfeb89479ad22cf277b3e3100c128a0151e612cb",
+            "issuanceDate":"2022-07-10T00:06:29.152Z",
+            "expirationDate":"2024-06-22T16:04:16.297Z",
+            "trustedList":"0x3Bfd7Ed9FFcD97F2f1EDd96C20D72F3236794c66",
+            "credentialSubject":{
+              "id":"did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
+              "type":"VaccinationEvent",
+              "batchNumber":"034343",
+              "administeringCentre":"Mexico City Vaccination Center 1",
+              "healthProfessional":"Juan Perez",
+              "countryOfVaccination":"Mexico",
+              "order":"1",
+              "recipient":{
+                "type":"VaccineRecipient",
+                "givenName":"Sergio",
+                "familyName":"Ceron",
+                "gender":"male",
+                "birthDate":"01-01-1989"
+              },
+              "vaccine":{
+                "type":"Vaccine",
+                "disease":"COVID-19",
+                "atcCode":"J07BX03"
+              }
+            },
+            "proof":[
+              {
+                "type":"EcdsaSecp256k1Signature2019",
+                "created":"2022-07-10T00:06:32.876Z",
+                "proofPurpose":"assertionMethod",
+                "verificationMethod":"did:lac:main:0xdfeb89479ad22cf277b3e3100c128a0151e612cb#vm-0",
+                "domain":"0xD923669d0E95f0dE8bCdDD4192f43dED7DDaC6a3",
+                "proofValue":"0x7cde8446d4345096e54b5146e07e63091f5ae6d606396df738cffac89c8add3c4e77a598cf65d0b7e4bfb23b258be86bdf9eaede0ca2a270b87d9c3b2c0e2eae1b"
+              }
+            ],
+            "credentialStatus":{
+              "id":"0xEc95EEafc97819effe49A5D2622f1398ec73B57F",
+              "type":"SmartContract"
+            }
+          }
+        }],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "credentialExists": "If the credential is registered in the Claims Verifier (boolean)",
+              "isNotRevoked": "If the credential has not been revoked (boolean)",
+              "issuerSignatureValid": "If the issuer signature is valid cryptographically (boolean)",
+              "additionalSigners": "If the credential has additional signatures and they are valid (boolean)",
+              "isNotExpired": "If the credential has not expired yet (boolean)",
+              "rootOfTrust": "The Chain of Trust"
+            }
           },
           "500": {
             "description": "Error",

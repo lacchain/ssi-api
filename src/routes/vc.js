@@ -1,6 +1,6 @@
 import Router from "./router.js";
 import { vcService } from "../services/index.js";
-import { buildVaccinationCredential } from "../util/vc.js";
+import { buildEducationCredential, buildVaccinationCredential } from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
 
@@ -14,7 +14,8 @@ export default class VCRouter extends Router {
     this.get( '/', 'PUBLIC', this.list );
     this.get( '/:id', 'PUBLIC', this.getVC );
     this.post( '/verify', 'PUBLIC', this.verify );
-    this.post( '/', 'PUBLIC', this.issue );
+    this.post( '/vaccination', 'PUBLIC', this.issueVaccination );
+    this.post( '/education', 'PUBLIC', this.issueEducation );
     this.delete( '/:id', 'PUBLIC', this.revoke );
   }
 
@@ -41,9 +42,15 @@ export default class VCRouter extends Router {
     }
   }
 
-  async issue( req ) {
+  async issueVaccination( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildVaccinationCredential( config.account, data, trustedList );
+    return await vcService.issue( credential, claimsVerifier );
+  }
+
+  async issueEducation( req ) {
+    const { claimsVerifier, trustedList, data } = req.body;
+    const credential = buildEducationCredential( config.account, data, trustedList );
     return await vcService.issue( credential, claimsVerifier );
   }
 

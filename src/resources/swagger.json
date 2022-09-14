@@ -660,13 +660,15 @@
             "description": "Error"
           }
         }
-      },
+      }
+    },
+    "/vc/vaccination": {
       "post": {
         "tags": [
           "Verifiable Credentials"
         ],
-        "summary": "Issue a Verifiable Credential",
-        "description": "Generate, sign and register a Verifiable Credential in Claims Verifier smart contract",
+        "summary": "Issue a Vaccination VC",
+        "description": "Generate, sign and register a LACChain Vaccination Verifiable Credential ",
         "operationId": "",
         "consumes": [
           "application/json"
@@ -691,7 +693,7 @@
                 "trustedList": {
                   "type": "string",
                   "description": "The address of the TL that will be used to verify the credential Root of Trust",
-                  "default": "0x5967b9b16024Ffc06Ef25Af6D77de00c5C5D621A"
+                  "default": "0x308fA5fBB3BDF36f496E8C21a80265BC1178025d"
                 },
                 "data": {
                   "type": "object",
@@ -712,6 +714,92 @@
                       "code": "J07BX03",
                       "batchNumber": "034343",
                       "dose": "1"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "id": "VC identifier"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/vc/education": {
+      "post": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Issue a Education VC",
+        "description": "Generate, sign and register a RedClara Verifiable Credential for Education",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "description": "",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "claimsVerifier": {
+                  "type": "string",
+                  "description": "The Claims Verifier smart contract address where will be registered the VC",
+                  "default": "0x8d50f6E736747e7F68AbEe261d024e36db4D3968"
+                },
+                "trustedList": {
+                  "type": "string",
+                  "description": "The address of the TL that will be used to verify the credential Root of Trust",
+                  "default": "0x308fA5fBB3BDF36f496E8C21a80265BC1178025d"
+                },
+                "data": {
+                  "type": "object",
+                  "description": "The credential information",
+                  "default": {
+                    "name": "Diploma Certificado Título y/o Grado",
+                    "expirationDate": "2024-06-22T16:04:16.297Z",
+                    "subject": {
+                      "did": "did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
+                      "givenName": "Name",
+                      "familyName": "LastName",
+                      "email": "email@email.com",
+                      "nationalId": "271367812367"
+                    },
+                    "signers": [{
+                      "did": "did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
+                      "name": "Nombre del signer 1"
+                    }],
+                    "diploma": {
+                      "title": "titulo",
+                      "description": "descripción",
+                      "category": "categoría",
+                      "modality": "modalidad",
+                      "url": "https://url.com",
+                      "issued": "2022-06-22T16:04:16.297Z",
+                      "educationalInstitution": "institución académica",
+                      "courseID": "C-444-555",
+                      "approved": true,
+                      "grade": "calificación",
+                      "campusName": "Nombre campus",
+                      "city": "MX",
+                      "country": "Mexico"
                     }
                   }
                 }
@@ -863,7 +951,7 @@
             "issuer":"did:lac:main:0xdfeb89479ad22cf277b3e3100c128a0151e612cb",
             "issuanceDate":"2022-07-10T00:06:29.152Z",
             "expirationDate":"2024-06-22T16:04:16.297Z",
-            "trustedList":"0x3Bfd7Ed9FFcD97F2f1EDd96C20D72F3236794c66",
+            "trustedList":"0x308fA5fBB3BDF36f496E8C21a80265BC1178025d",
             "credentialSubject":{
               "id":"did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
               "type":"VaccinationEvent",

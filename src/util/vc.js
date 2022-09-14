@@ -26,7 +26,7 @@ export function buildVaccinationCredential( issuer, data, trustedList ) {
 		"name": disease,
 		"issuer": `did:lac:main:${issuer.address}`,
 		"issuanceDate": moment().toISOString(),
-		"expirationDate":  moment(data.expirationDate).toISOString(),
+		"expirationDate": moment(data.expirationDate).toISOString(),
 		"trustedList": trustedList,
 		"credentialSubject": {
 			"id": subject.did,
@@ -50,4 +50,55 @@ export function buildVaccinationCredential( issuer, data, trustedList ) {
 			}
 		}
 	}
+}
+
+export function buildEducationCredential( issuer, data, trustedList ) {
+	const { name, subject, expirationDate, diploma, signers } = data;
+	return {
+		"@context": [
+			"https://www.w3.org/2018/credentials/v1",
+			"https://credentials-library.lacchain.net/credentials/education/v1",
+			"https://credentials-library.lacchain.net/credentials/trusted/v1",
+			"https://credentials-library.lacchain.net/credentials/education/redclara/diploma/v1"
+		],
+		"type": [
+			"VerifiableCredential",
+			"EducationCertificate"
+		],
+		"id": `urn:uuid:${uuid.uuid()}`,
+		"name": name,
+		"issuer": `did:lac:main:${issuer.address}`,
+		"issuanceDate": moment().toISOString(),
+		"expirationDate": moment(expirationDate).toISOString(),
+		"trustedList": trustedList,
+		"credentialSubject": {
+			"id": subject.did,
+			"type": "Diploma",
+			"attendant": {
+				"givenName": subject.givenName,
+				"familyName": subject.familyName,
+				"email": subject.email,
+				"nationalId": subject.nationalId
+			},
+			"signers": signers.map( signer => ({
+				"did": signer.did,
+				"name": signer.name
+			}) ),
+			"diploma": {
+				"title": diploma.title,
+				"description": diploma.description,
+				"category": diploma.category,
+				"modality": diploma.modality,
+				"url": diploma.url,
+				"issued": diploma.issued,
+				"educationalInstitution": diploma.educationalInstitution,
+				"courseID": diploma.courseID,
+				"approved": diploma.approved,
+				"grade": diploma.grade,
+				"campusName": diploma.campusName,
+				"city": diploma.city,
+				"country": diploma.country
+			}
+		}
+	};
 }

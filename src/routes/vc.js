@@ -1,8 +1,10 @@
 import Router from "./router.js";
 import { vcService } from "../services/index.js";
-import { buildEducationCredential, buildVaccinationCredential } from "../util/vc.js";
+import { buildEducationCredential, buildVaccinationCredential, buildVerifiablePresentation } from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
+import { fillFields } from "../util/pdf.js";
+import { sendVC } from "../util/mailbox.js";
 
 export default class VCRouter extends Router {
 
@@ -16,6 +18,7 @@ export default class VCRouter extends Router {
     this.post( '/verify', 'PUBLIC', this.verify );
     this.post( '/vaccination', 'PUBLIC', this.issueVaccination );
     this.post( '/education', 'PUBLIC', this.issueEducation );
+    this.post( '/education/cudi', 'PUBLIC', this.issueCUDI );
     this.delete( '/:id', 'PUBLIC', this.revoke );
   }
 
@@ -45,13 +48,28 @@ export default class VCRouter extends Router {
   async issueVaccination( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildVaccinationCredential( config.account, data, trustedList );
-    return await vcService.issue( credential, claimsVerifier );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    await sendVC( config.account, vc.credentialSubject.id, vc );
+    return { id: vc._id };
   }
 
   async issueEducation( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildEducationCredential( config.account, data, trustedList );
-    return await vcService.issue( credential, claimsVerifier );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    await sendVC( config.account, vc.credentialSubject.id, vc );
+    return { id: vc._id };
+  }
+
+  async issueCUDI( req ) {
+    const { claimsVerifier, trustedList, data } = req.body;
+    const credential = buildEducationCredential( config.account, data, trustedList );
+    const pdf = fillFields( credential );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    const presentation = buildVerifiablePresentation( credential, pdf );
+    await sendVC( config.account, vc.credentialSubject.id, presentation );
+    return { id: vc._id };
+
   }
 
   async verify( req ){

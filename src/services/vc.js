@@ -3,7 +3,6 @@ import ethers from "ethers";
 import { getCredentialHash, signCredential } from "@lacchain/vc-contracts-utils";
 import VC from "../model/vc.js";
 import config from "../config.js";
-import { sendVC } from "../util/mailbox.js";
 import { CLAIMS_VERIFIER, CREDENTIAL_REGISTRY, signer } from "../util/contracts.js";
 import { getIssuerName, getRootOfTrust, verifyCredential, verifyRootOfTrust } from "../util/vc_contracts.js";
 
@@ -44,10 +43,7 @@ export default class VCService {
       data: credential
     } );
 
-    const saved = await vc.save();
-    await sendVC( config.account, credential.credentialSubject.id, credential );
-
-    return { id: saved._id };
+    return await vc.save();
   }
 
   async revoke( vc ) {

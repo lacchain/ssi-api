@@ -102,3 +102,12 @@ export function buildEducationCredential( issuer, data, trustedList ) {
 		}
 	};
 }
+
+export function buildVerifiablePresentation( credential, attachment ) {
+	return {
+		"@context": ["https://www.w3.org/2018/credentials/v1"],
+		"type": "VerifiablePresentation",
+		"verifiableCredential": [credential],
+		"attachment": attachment
+	}
+}

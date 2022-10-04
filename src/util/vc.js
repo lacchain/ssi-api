@@ -107,6 +107,7 @@ export function buildVerifiablePresentation( credential, attachment ) {
 	return {
 		"@context": ["https://www.w3.org/2018/credentials/v1"],
 		"type": "VerifiablePresentation",
+		"id": credential.id,
 		"verifiableCredential": [credential],
 		"attachment": attachment
 	}

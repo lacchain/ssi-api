@@ -49,7 +49,7 @@ export default class VCRouter extends Router {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildVaccinationCredential( config.account, data, trustedList );
     const vc = await vcService.issue( credential, claimsVerifier );
-    await sendVC( config.account, vc.credentialSubject.id, vc );
+    await sendVC( config.account, vc.data.credentialSubject.id, vc );
     return { id: vc._id };
   }
 
@@ -57,17 +57,17 @@ export default class VCRouter extends Router {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildEducationCredential( config.account, data, trustedList );
     const vc = await vcService.issue( credential, claimsVerifier );
-    await sendVC( config.account, vc.credentialSubject.id, vc );
+    await sendVC( config.account, vc.data.credentialSubject.id, vc );
     return { id: vc._id };
   }
 
   async issueCUDI( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildEducationCredential( config.account, data, trustedList );
-    const pdf = fillFields( credential );
+    const pdf = await fillFields( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
-    await sendVC( config.account, vc.credentialSubject.id, presentation );
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).then( r=>console.log('success', r) ).catch(e=>console.error('err', e));
     return { id: vc._id };
 
   }

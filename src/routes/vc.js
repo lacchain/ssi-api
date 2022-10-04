@@ -49,7 +49,7 @@ export default class VCRouter extends Router {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildVaccinationCredential( config.account, data, trustedList );
     const vc = await vcService.issue( credential, claimsVerifier );
-    await sendVC( config.account, vc.data.credentialSubject.id, vc );
+    await sendVC( config.account, vc.data.credentialSubject.id, vc.data );
     return { id: vc._id };
   }
 
@@ -57,7 +57,7 @@ export default class VCRouter extends Router {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildEducationCredential( config.account, data, trustedList );
     const vc = await vcService.issue( credential, claimsVerifier );
-    await sendVC( config.account, vc.data.credentialSubject.id, vc );
+    await sendVC( config.account, vc.data.credentialSubject.id, vc.data );
     return { id: vc._id };
   }
 

@@ -3,7 +3,7 @@ import { vcService } from "../services/index.js";
 import { buildEducationCredential, buildVaccinationCredential, buildVerifiablePresentation } from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
-import { fillFields } from "../util/pdf.js";
+import { buildCUDIVC, buildSerenaVC } from "../util/pdf.js";
 import { sendVC } from "../util/mailbox.js";
 
 export default class VCRouter extends Router {
@@ -19,6 +19,7 @@ export default class VCRouter extends Router {
     this.post( '/vaccination', 'PUBLIC', this.issueVaccination );
     this.post( '/education', 'PUBLIC', this.issueEducation );
     this.post( '/education/cudi', 'PUBLIC', this.issueCUDI );
+    this.post( '/education/serena', 'PUBLIC', this.issueSerena );
     this.delete( '/:id', 'PUBLIC', this.revoke );
   }
 
@@ -64,12 +65,21 @@ export default class VCRouter extends Router {
   async issueCUDI( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildEducationCredential( config.account, data, trustedList );
-    const pdf = await fillFields( credential );
+    const pdf = await buildCUDIVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
-    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).then( r=>console.log('success', r) ).catch(e=>console.error('err', e));
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>console.error('err', e));
     return { id: vc._id };
+  }
 
+  async issueSerena( req ) {
+    const { claimsVerifier, trustedList, data } = req.body;
+    const credential = buildEducationCredential( config.account, data, trustedList );
+    const pdf = await buildSerenaVC( credential );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    const presentation = buildVerifiablePresentation( credential, pdf );
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>console.error('err', e));
+    return { id: vc._id };
   }
 
   async verify( req ){

@@ -29,5 +29,7 @@ export async function sendVC( sender, recipientDID, message ) {
 		}
 	}
 	const encryptedToMailbox = await encrypt( envelope, sender.encryptionKey, MAILBOX_DID, true );
-	return await axios.post( 'https://mailbox.lacchain.net/vc', encryptedToMailbox, { headers: { token } } );
+	return await axios.post( 'https://mailbox.lacchain.net/vc', encryptedToMailbox, {
+		maxContentLength: Infinity,
+		maxBodyLength: Infinity, headers: { token } } );
 }

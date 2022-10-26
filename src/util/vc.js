@@ -97,7 +97,9 @@ export function buildEducationCredential( issuer, data, trustedList ) {
 				"grade": diploma.grade,
 				"campusName": diploma.campusName,
 				"city": diploma.city,
-				"country": diploma.country
+				"country": diploma.country,
+				"recordID": diploma.recordID || ';;',
+				"hashQR": diploma.hashQR || ''
 			}
 		}
 	};

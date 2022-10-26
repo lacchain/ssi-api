@@ -971,7 +971,9 @@
                       "grade": "calificación",
                       "campusName": "Nombre campus",
                       "city": "MX",
-                      "country": "Mexico"
+                      "country": "Mexico",
+                      "recordID": "1294;99572;3079",
+                      "hashQR": "https://phoenix.cic.userena.cl/verificacion.php?doc=OS2%2ByEb4Wo8pwmag2yJLo2fShnLKVo2VN%2B9NQWuLUB8%3D"
                     }
                   }
                 }

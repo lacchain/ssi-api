@@ -5,6 +5,7 @@ import config from "../config.js";
 import APIError from "../util/error.js";
 import { buildCUDIVC, buildSerenaVC } from "../util/pdf.js";
 import { sendVC } from "../util/mailbox.js";
+import fs from "fs";
 
 export default class VCRouter extends Router {
 
@@ -68,7 +69,7 @@ export default class VCRouter extends Router {
     const pdf = await buildCUDIVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
-    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>console.error('err', e));
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>console.error('err', e.message));
     return { id: vc._id };
   }
 
@@ -78,7 +79,9 @@ export default class VCRouter extends Router {
     const pdf = await buildSerenaVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
-    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>console.error('err', e));
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>{
+      console.error('err', e.message)
+    });
     return { id: vc._id };
   }
 

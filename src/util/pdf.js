@@ -3,6 +3,7 @@ import pdf from "pdf-lib";
 import path from "path";
 import moment from "moment";
 import qrcode from "qrcode";
+import fontkit from '@pdf-lib/fontkit'
 
 const months = ['enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre']
 
@@ -28,18 +29,32 @@ export async function buildSerenaVC( vc ) {
   const issued = moment( subject.diploma.issued );
   const issuance = moment( vc.issuanceDate );
 
+  pdfDoc.registerFontkit(fontkit);
+
+  const fontBytes = fs.readFileSync(`${path.resolve()}/src/util/freeserif.ttf`);
+  const customFont = await pdfDoc.embedFont(fontBytes);
+
   const buffer = await new Promise( resolve => qrcode.toBuffer( subject.diploma.hashQR, ( err, buffer ) => resolve( buffer ) ) );
   const pdfImage = await pdfDoc.embedPng( buffer );
 
   form.getTextField( 'subject' ).setText( `${subject.attendant.givenName} ${subject.attendant.familyName}` );
+  form.getTextField( 'subject' ).updateAppearances( customFont );
   form.getTextField( 'title' ).setText( subject.diploma.title );
+  form.getTextField( 'title' ).updateAppearances( customFont );
   form.getTextField( 'issued' ).setText( `${issued.date()} de ${months[issued.month()]} de ${issued.year()}` );
+  form.getTextField( 'issued' ).updateAppearances( customFont );
   form.getTextField( 'issuance' ).setText( `${issuance.date()} de ${months[issuance.month()]} de ${issuance.year()}` );
+  form.getTextField( 'issuance' ).updateAppearances( customFont );
   form.getTextField( 'correlativo' ).setText( correlativo );
+  form.getTextField( 'correlativo' ).updateAppearances( customFont );
   form.getTextField( 'registro' ).setText( registro );
+  form.getTextField( 'registro' ).updateAppearances( customFont );
   form.getTextField( 'resolucion' ).setText( resolucion );
+  form.getTextField( 'resolucion' ).updateAppearances( customFont );
   form.getTextField( 'id' ).setText( subject.attendant.nationalId );
+  form.getTextField( 'id' ).updateAppearances( customFont );
   form.getButton( 'qr' ).setImage( pdfImage );
+  form.flatten();
 
   return new Buffer(await pdfDoc.save()).toString('base64');
 }

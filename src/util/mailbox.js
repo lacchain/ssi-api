@@ -15,7 +15,7 @@ export async function sendVC( sender, recipientDID, message ) {
 		{ alg: 'ES256K' }
 	);
 
-	const encryptedToBob = await encrypt( message, sender.encryptionKey, recipientDID, true );
+	const encryptedToBob = await encrypt( message, sender.encryptionKey, recipientDID, false );
 
 	const envelope = {
 		"type": "https://didcomm.org/routing/2.0/forward",
@@ -28,7 +28,7 @@ export async function sendVC( sender, recipientDID, message ) {
 			]
 		}
 	}
-	const encryptedToMailbox = await encrypt( envelope, sender.encryptionKey, MAILBOX_DID, true );
+	const encryptedToMailbox = await encrypt( envelope, sender.encryptionKey, MAILBOX_DID, false );
 	return await axios.post( 'https://mailbox.lacchain.net/vc', encryptedToMailbox, {
 		maxContentLength: Infinity,
 		maxBodyLength: Infinity, headers: { token } } );

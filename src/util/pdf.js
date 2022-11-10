@@ -13,8 +13,10 @@ export async function buildCUDIVC( vc ) {
   const pdfDoc = await pdf.PDFDocument.load( fs.readFileSync( file ) );
   const form = pdfDoc.getForm();
 
-  form.getTextField( 'name' ).setText( `${subject.attendant.givenName} ${subject.attendant.familyName}` );
+  form.getTextField( 'name' ).setText( `${subject.attendant.givenName} ${subject.attendant.familyName}`.toUpperCase() );
   form.getTextField( 'workshop' ).setText( subject.diploma.title );
+  form.flatten();
+
   return new Buffer(await pdfDoc.save()).toString('base64');
 }
 

@@ -34,7 +34,9 @@ export async function buildSerenaVC( vc ) {
   pdfDoc.registerFontkit(fontkit);
 
   const fontBytes = fs.readFileSync(`${path.resolve()}/src/util/freeserif.ttf`);
+  const fontBytesBold = fs.readFileSync(`${path.resolve()}/src/util/freeserif-bold.ttf`);
   const customFont = await pdfDoc.embedFont(fontBytes);
+  const customFontBold = await pdfDoc.embedFont(fontBytesBold);
 
   const buffer = await new Promise( resolve => qrcode.toBuffer( subject.diploma.hashQR, ( err, buffer ) => resolve( buffer ) ) );
   const pdfImage = await pdfDoc.embedPng( buffer );
@@ -47,10 +49,10 @@ export async function buildSerenaVC( vc ) {
   form.getTextField( 'issued' ).updateAppearances( customFont );
   form.getTextField( 'issuance' ).setText( `${issuance.date()} de ${months[issuance.month()]} de ${issuance.year()}` );
   form.getTextField( 'issuance' ).updateAppearances( customFont );
-  form.getTextField( 'correlativo' ).setText( correlativo );
-  form.getTextField( 'correlativo' ).updateAppearances( customFont );
-  form.getTextField( 'registro' ).setText( registro );
-  form.getTextField( 'registro' ).updateAppearances( customFont );
+  //form.getTextField( 'correlativo' ).setText( correlativo );
+  //form.getTextField( 'correlativo' ).updateAppearances( customFont );
+  form.getTextField( 'registro' ).setText( `${correlativo} - ${registro}` );
+  form.getTextField( 'registro' ).updateAppearances( customFontBold );
   form.getTextField( 'resolucion' ).setText( resolucion );
   form.getTextField( 'resolucion' ).updateAppearances( customFont );
   form.getTextField( 'id' ).setText( subject.attendant.nationalId );

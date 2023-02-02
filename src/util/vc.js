@@ -82,7 +82,8 @@ export function buildEducationCredential( issuer, data, trustedList ) {
 			},
 			"signers": signers.map( signer => ({
 				"did": signer.did,
-				"name": signer.name
+				"name": signer.name,
+				"occupation": signer.occupation
 			}) ),
 			"diploma": {
 				"title": diploma.title,
@@ -91,6 +92,7 @@ export function buildEducationCredential( issuer, data, trustedList ) {
 				"modality": diploma.modality,
 				"url": diploma.url,
 				"issued": diploma.issued,
+				"issuance": diploma.issuance,
 				"educationalInstitution": diploma.educationalInstitution,
 				"courseID": diploma.courseID,
 				"approved": diploma.approved,

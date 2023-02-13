@@ -3,7 +3,7 @@ import { vcService } from "../services/index.js";
 import { buildEducationCredential, buildVaccinationCredential, buildVerifiablePresentation } from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
-import { buildCUDIVC, buildSerenaVC } from "../util/pdf.js";
+import { buildCediaVC, buildCUDIVC, buildRedClaraVC, buildSerenaVC } from "../util/pdf.js";
 import { sendVC } from "../util/mailbox.js";
 import fs from "fs";
 
@@ -21,6 +21,8 @@ export default class VCRouter extends Router {
     this.post( '/education', 'PUBLIC', this.issueEducation );
     this.post( '/education/cudi', 'PUBLIC', this.issueCUDI );
     this.post( '/education/serena', 'PUBLIC', this.issueSerena );
+    this.post( '/education/cedia', 'PUBLIC', this.issueCedia );
+    this.post( '/education/redclara', 'PUBLIC', this.issueRedClara );
     this.delete( '/:id', 'PUBLIC', this.revoke );
   }
 
@@ -77,6 +79,30 @@ export default class VCRouter extends Router {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildEducationCredential( config.account, data, trustedList );
     const pdf = await buildSerenaVC( credential );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    const presentation = buildVerifiablePresentation( credential, pdf );
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>{
+      console.error('err', e.message)
+    });
+    return { id: vc._id };
+  }
+
+  async issueCedia( req ) {
+    const { claimsVerifier, trustedList, data } = req.body;
+    const credential = buildEducationCredential( config.account, data, trustedList );
+    const pdf = await buildCediaVC( credential );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    const presentation = buildVerifiablePresentation( credential, pdf );
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>{
+      console.error('err', e.message)
+    });
+    return { id: vc._id };
+  }
+
+  async issueRedClara( req ) {
+    const { claimsVerifier, trustedList, data } = req.body;
+    const credential = buildEducationCredential( config.account, data, trustedList );
+    const pdf = await buildRedClaraVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
     await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>{

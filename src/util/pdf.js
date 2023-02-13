@@ -20,6 +20,31 @@ export async function buildCUDIVC( vc ) {
   return new Buffer(await pdfDoc.save()).toString('base64');
 }
 
+export async function buildCediaVC( vc ) {
+  const { credentialSubject: subject } = vc;
+  const file = `${path.resolve()}/src/util/cedia.pdf`;
+  const pdfDoc = await pdf.PDFDocument.load( fs.readFileSync( file ) );
+  const form = pdfDoc.getForm();
+
+  form.getTextField( 'name' ).setText( `${subject.attendant.givenName} ${subject.attendant.familyName}`.toUpperCase() );
+  form.getTextField( 'description' ).setText( `Por haber aprobado el curso: ${subject.diploma.title} ${subject.diploma.description}` );
+  form.flatten();
+
+  return new Buffer(await pdfDoc.save()).toString('base64');
+}
+
+export async function buildRedClaraVC( vc ) {
+  const { credentialSubject: subject } = vc;
+  const file = `${path.resolve()}/src/util/redclara.pdf`;
+  const pdfDoc = await pdf.PDFDocument.load( fs.readFileSync( file ) );
+  const form = pdfDoc.getForm();
+
+  form.getTextField( 'name' ).setText( `${subject.attendant.givenName} ${subject.attendant.familyName}`.toUpperCase() );
+  form.flatten();
+
+  return new Buffer(await pdfDoc.save()).toString('base64');
+}
+
 
 export async function buildSerenaVC( vc ) {
   const { credentialSubject: subject } = vc;

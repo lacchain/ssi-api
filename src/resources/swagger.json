@@ -996,6 +996,182 @@
         }
       }
     },
+    "/vc/education/cedia": {
+      "post": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Issue a Education VC for CEDIA",
+        "description": "Generate, sign and register a RedClara Verifiable Credential for Education for CEDIA",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "description": "",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "claimsVerifier": {
+                  "type": "string",
+                  "description": "The Claims Verifier smart contract address where will be registered the VC",
+                  "default": "0x8d50f6E736747e7F68AbEe261d024e36db4D3968"
+                },
+                "trustedList": {
+                  "type": "string",
+                  "description": "The address of the TL that will be used to verify the credential Root of Trust",
+                  "default": "0x308fA5fBB3BDF36f496E8C21a80265BC1178025d"
+                },
+                "data": {
+                  "type": "object",
+                  "description": "The credential information",
+                  "default": {
+                    "name": "Diploma Certificado Título y/o Grado",
+                    "expirationDate": "2024-06-22T16:04:16.297Z",
+                    "subject": {
+                      "did": "did:lac:main:0xa08ff271df7c47dea239a1d07f9c97782fc811f8",
+                      "givenName": "Sergio",
+                      "familyName": "Ceron",
+                      "email": "email@email.com",
+                      "nationalId": "271367812367"
+                    },
+                    "signers": [{
+                      "did": "did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
+                      "name": "Nombre del signer 1"
+                    }],
+                    "diploma": {
+                      "title": "Ing. en Sistemas Computacionales",
+                      "description": "descripción",
+                      "category": "categoría",
+                      "modality": "modalidad",
+                      "url": "https://url.com",
+                      "issued": "2022-06-22T16:04:16.297Z",
+                      "educationalInstitution": "institución académica",
+                      "courseID": "C-444-555",
+                      "approved": true,
+                      "grade": "calificación",
+                      "campusName": "Nombre campus",
+                      "city": "MX",
+                      "country": "Mexico",
+                      "recordID": "1294;99572;3079",
+                      "hashQR": "https://phoenix.cic.userena.cl/verificacion.php?doc=OS2%2ByEb4Wo8pwmag2yJLo2fShnLKVo2VN%2B9NQWuLUB8%3D"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "id": "VC identifier"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
+    "/vc/education/redclara": {
+      "post": {
+        "tags": [
+          "Verifiable Credentials"
+        ],
+        "summary": "Issue a Education VC for Red Clara and LACChain Course",
+        "description": "Generate, sign and register a RedClara Verifiable Credential for Education for Red Clara and LACChain Course",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "body",
+            "description": "",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "properties": {
+                "claimsVerifier": {
+                  "type": "string",
+                  "description": "The Claims Verifier smart contract address where will be registered the VC",
+                  "default": "0x8d50f6E736747e7F68AbEe261d024e36db4D3968"
+                },
+                "trustedList": {
+                  "type": "string",
+                  "description": "The address of the TL that will be used to verify the credential Root of Trust",
+                  "default": "0x308fA5fBB3BDF36f496E8C21a80265BC1178025d"
+                },
+                "data": {
+                  "type": "object",
+                  "description": "The credential information",
+                  "default": {
+                    "name": "Diploma Certificado Título y/o Grado",
+                    "expirationDate": "2024-06-22T16:04:16.297Z",
+                    "subject": {
+                      "did": "did:lac:main:0xa08ff271df7c47dea239a1d07f9c97782fc811f8",
+                      "givenName": "Sergio",
+                      "familyName": "Ceron",
+                      "email": "email@email.com",
+                      "nationalId": "271367812367"
+                    },
+                    "signers": [{
+                      "did": "did:lac:main:0xeaa30ea9dd1da717034bcd9ebee5b62694d10ce7",
+                      "name": "Nombre del signer 1"
+                    }],
+                    "diploma": {
+                      "title": "Ing. en Sistemas Computacionales",
+                      "description": "descripción",
+                      "category": "categoría",
+                      "modality": "modalidad",
+                      "url": "https://url.com",
+                      "issued": "2022-06-22T16:04:16.297Z",
+                      "educationalInstitution": "institución académica",
+                      "courseID": "C-444-555",
+                      "approved": true,
+                      "grade": "calificación",
+                      "campusName": "Nombre campus",
+                      "city": "MX",
+                      "country": "Mexico",
+                      "recordID": "1294;99572;3079",
+                      "hashQR": "https://phoenix.cic.userena.cl/verificacion.php?doc=OS2%2ByEb4Wo8pwmag2yJLo2fShnLKVo2VN%2B9NQWuLUB8%3D"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "id": "VC identifier"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/vc/{id}": {
       "get": {
         "tags": [

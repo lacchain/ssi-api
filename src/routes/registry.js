@@ -11,6 +11,7 @@ export default class RegistryRouter extends Router {
     this.post( '/credentials/deploy', 'PUBLIC', this.deployRegistry );
     this.post( '/verifier/deploy', 'PUBLIC', this.deployVerifier );
     this.put( '/verifier/:address/issuer', 'PUBLIC', this.addIssuer );
+    this.get( '/role/:claimsVerifier/:address', 'PUBLIC', this.getRole );
   }
 
   async deployRegistry() {
@@ -25,6 +26,11 @@ export default class RegistryRouter extends Router {
   async addIssuer( req ) {
     const { params: { address }, body: { issuer } } = req;
     return registryService.addIssuer( address, issuer );
+  }
+
+  async getRole( req ) {
+    const { params: { claimsVerifier, address } } = req;
+    return registryService.getRole( claimsVerifier, address );
   }
 
 }

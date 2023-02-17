@@ -37,4 +37,11 @@ export default class RegistryService {
     return { hash: tx.hash };
   }
 
+
+  async getRole( verifier, issuer ){
+    const claimsVerifier = new ethers.Contract( verifier, CLAIMS_VERIFIER.abi, signer );
+    const ISSUER_ROLE = await claimsVerifier.ISSUER_ROLE();
+    return await claimsVerifier.getRoleMember( ISSUER_ROLE, 1 );
+  }
+
 }

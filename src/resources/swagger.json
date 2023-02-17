@@ -630,6 +630,53 @@
         }
       }
     },
+    "/registry/role/{claimsVerifier}/{address}": {
+      "get": {
+        "tags": [
+          "Credentials Registry"
+        ],
+        "summary": "Get Role",
+        "description": "Get the role in the Claims Verifier smart contract",
+        "operationId": "",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "claimsVerifier",
+            "description": "The Claims Verifier address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0x8d50f6E736747e7F68AbEe261d024e36db4D3968"
+          },
+          {
+            "name": "address",
+            "description": "The account address",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "default": "0xdfeb89479ad22cf277b3e3100c128a0151e612cb"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success",
+            "examples": {
+              "application/json": {
+                "hash": "The blockchain transaction hash"
+              }
+            }
+          },
+          "500": {
+            "description": "Error"
+          }
+        }
+      }
+    },
     "/vc": {
       "get": {
         "tags": [

@@ -3,14 +3,16 @@ import ethers from "ethers";
 import { getCredentialHash, signCredential } from "@lacchain/vc-contracts-utils";
 import VC from "../model/vc.js";
 import config from "../config.js";
-import { CLAIMS_VERIFIER, CREDENTIAL_REGISTRY, signer } from "../util/contracts.js";
+import { CLAIMS_VERIFIER, CLAIMS_VERIFIER_GAS, CREDENTIAL_REGISTRY, CREDENTIAL_REGISTRY_GAS, signer } from "../util/contracts.js";
 import { getIssuerName, getRootOfTrust, verifyCredential, verifyRootOfTrust } from "../util/vc_contracts.js";
 
 export default class VCService {
 
   async issue( credential, verifier ) {
     const issuerAddress = config.account.address;
-    const claimsVerifier = new ethers.Contract( verifier, CLAIMS_VERIFIER.abi, signer );
+    const claimsVerifier = config.network.nodeAddress ?
+      new ethers.Contract( verifier, CLAIMS_VERIFIER_GAS.abi, signer ) :
+      new ethers.Contract( verifier, CLAIMS_VERIFIER.abi, signer );
 
     const subject = credential.credentialSubject.id.split( ':' ).slice( -1 )[0];
 
@@ -48,7 +50,9 @@ export default class VCService {
 
   async revoke( vc ) {
     const issuerAddress = config.account.address;
-    const credentialRegistry = new ethers.Contract( vc.registry, CREDENTIAL_REGISTRY.abi, signer );
+    const credentialRegistry = config.network.nodeAddress ?
+      new ethers.Contract( vc.registry, CREDENTIAL_REGISTRY_GAS.abi, signer ) :
+      new ethers.Contract( vc.registry, CREDENTIAL_REGISTRY.abi, signer );
 
     const credentialHash = getCredentialHash( vc.data, issuerAddress, vc.verifier );
     const tx = await credentialRegistry.revokeCredential( credentialHash );

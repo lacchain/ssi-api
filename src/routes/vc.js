@@ -1,6 +1,6 @@
 import Router from "./router.js";
 import { vcService } from "../services/index.js";
-import { buildEducationCredential, buildVaccinationCredential, buildVerifiablePresentation } from "../util/vc.js";
+import { buildVerifiablePresentation } from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
 import { buildCediaVC, buildCUDIVC, buildRedClaraVC, buildSerenaVC } from "../util/pdf.js";

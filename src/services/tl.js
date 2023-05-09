@@ -1,13 +1,15 @@
 import ethers from "ethers";
 import moment from "moment";
 import config from "../config.js";
-import { TL_CONTRACT, signer } from "../util/contracts.js";
+import { TL_CONTRACT, signer, TL_CONTRACT_GAS } from "../util/contracts.js";
 import PKI from "../model/pki.js";
 
 export default class TLService {
 
   async deploy( parent, name ) {
-    const TLContract = new ethers.ContractFactory( TL_CONTRACT.abi, TL_CONTRACT.bytecode, signer );
+    const TLContract = config.network.nodeAddress ?
+      new ethers.ContractFactory( TL_CONTRACT_GAS.abi, TL_CONTRACT_GAS.bytecode, signer ) :
+      new ethers.ContractFactory( TL_CONTRACT.abi, TL_CONTRACT.bytecode, signer );
     const tl = await TLContract.deploy( parent, name, { gasPrice: 0 } );
     const receipt = await tl.deployTransaction.wait();
     const pki = new PKI( { kind: 'TL', parent, name, address: receipt.contractAddress, hash: receipt.transactionHash } );
@@ -28,7 +30,9 @@ export default class TLService {
 
   async getEntities( tl ){
     if( !tl ) return [];
-    const contract = new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
+    const contract = config.network.nodeAddress ?
+      new ethers.Contract( tl.address, TL_CONTRACT_GAS.abi, signer ) :
+      new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
     const entities = [];
     for( const e of tl.entities ){
       const entity = await contract.entities( e );
@@ -44,7 +48,9 @@ export default class TLService {
   }
 
   async registerEntity( tl, { address, did, name, expires } ) {
-    const contract = new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
+    const contract = config.network.nodeAddress ?
+      new ethers.Contract( tl.address, TL_CONTRACT_GAS.abi, signer ) :
+      new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
     const tx = await contract.register( address, did, name, expires );
     tl.entities.push( address );
     await tl.save();
@@ -52,7 +58,9 @@ export default class TLService {
   }
 
   async revokeEntity( tl, address ) {
-    const contract = new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
+    const contract = config.network.nodeAddress ?
+      new ethers.Contract( tl.address, TL_CONTRACT_GAS.abi, signer ) :
+      new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
     const tx = await contract.revoke( address );
     return { hash: tx.hash };
   }

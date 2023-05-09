@@ -8,7 +8,7 @@ const diseases = {
 	'J07BL01': 'Yellow fever'
 };
 
-export function buildVaccinationCredential( issuer, data, trustedList ) {
+export function buildW3CVaccinationCredential( issuer, data, trustedList ) {
 	const { subject, vaccine } = data;
 	const disease = diseases[vaccine.code];
 	return {
@@ -52,7 +52,7 @@ export function buildVaccinationCredential( issuer, data, trustedList ) {
 	}
 }
 
-export function buildEducationCredential( issuer, data, trustedList ) {
+export function buildRedClaraCredential( issuer, data, trustedList ) {
 	const { name, subject, expirationDate, diploma, signers } = data;
 	return {
 		"@context": [

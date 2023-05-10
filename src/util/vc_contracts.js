@@ -21,6 +21,7 @@ export async function verifyCredential( vc ) {
 		"function verifySigner(tuple(address issuer,address subject,bytes32 data,uint256 validFrom,uint256 validTo), bytes calldata _signature) view returns (bool)"
 	], new ethers.providers.JsonRpcProvider( config.network.rpc ) );
 
+
 	const hashCredentialHex = `0x${sha256( JSON.stringify( vc.credentialSubject ) )}`;
 	const issuerAddress = vc.issuer.split( ':' ).slice( -1 )[0];
 	const subjectAddress = vc.credentialSubject.id.split( ':' ).slice( -1 )[0];

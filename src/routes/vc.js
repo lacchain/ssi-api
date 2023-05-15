@@ -1,6 +1,6 @@
 import Router from "./router.js";
 import { vcService } from "../services/index.js";
-import { buildVerifiablePresentation } from "../util/vc.js";
+import { buildRedClaraCredential, buildVerifiablePresentation, buildW3CVaccinationCredential } from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
 import { buildCediaVC, buildCUDIVC, buildRedClaraVC, buildSerenaVC } from "../util/pdf.js";
@@ -51,7 +51,7 @@ export default class VCRouter extends Router {
 
   async issueVaccination( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
-    const credential = buildVaccinationCredential( config.account, data, trustedList );
+    const credential = buildW3CVaccinationCredential( config.account, data, trustedList );
     const vc = await vcService.issue( credential, claimsVerifier );
     await sendVC( config.account, vc.data.credentialSubject.id, vc.data );
     return { id: vc._id };
@@ -59,7 +59,7 @@ export default class VCRouter extends Router {
 
   async issueEducation( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
-    const credential = buildEducationCredential( config.account, data, trustedList );
+    const credential = buildRedClaraCredential( config.account, data, trustedList );
     const vc = await vcService.issue( credential, claimsVerifier );
     await sendVC( config.account, vc.data.credentialSubject.id, vc.data );
     return { id: vc._id };
@@ -67,7 +67,7 @@ export default class VCRouter extends Router {
 
   async issueCUDI( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
-    const credential = buildEducationCredential( config.account, data, trustedList );
+    const credential = buildRedClaraCredential( config.account, data, trustedList );
     const pdf = await buildCUDIVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
@@ -77,7 +77,7 @@ export default class VCRouter extends Router {
 
   async issueSerena( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
-    const credential = buildEducationCredential( config.account, data, trustedList );
+    const credential = buildRedClaraCredential( config.account, data, trustedList );
     const pdf = await buildSerenaVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
@@ -89,7 +89,7 @@ export default class VCRouter extends Router {
 
   async issueCedia( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
-    const credential = buildEducationCredential( config.account, data, trustedList );
+    const credential = buildRedClaraCredential( config.account, data, trustedList );
     const pdf = await buildCediaVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );
@@ -101,7 +101,7 @@ export default class VCRouter extends Router {
 
   async issueRedClara( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
-    const credential = buildEducationCredential( config.account, data, trustedList );
+    const credential = buildRedClaraCredential( config.account, data, trustedList );
     const pdf = await buildRedClaraVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );

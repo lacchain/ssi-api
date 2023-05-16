@@ -55,7 +55,7 @@ export async function verifyCredential( vc ) {
 
 export const getIssuerName = async vc => {
 	let tlContract = new ethers.Contract( vc.trustedList, TL_CONTRACT.abi, signer );
-	const entity = await tlContract.entities( vc.issuer.replace( 'did:lac:main:', '' ) );
+	const entity = await tlContract.entities( vc.issuer.replace( 'did:lac:main:', '' ).replace( 'did:lac:openprotest:', '' ) );
 	return entity.name;
 
 }
@@ -99,7 +99,7 @@ export const verifyRootOfTrust = async( rootOfTrust, issuer ) => {
 	for( const tl of rootOfTrust.slice( 1 ) ) {
 		const tlContract = new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
 		if( index + 1 >= rootOfTrust.length ) {
-			validation[index] = ( await tlContract.entities( issuer.replace( 'did:lac:main:', '' ) ) ).status === 1;
+			validation[index] = ( await tlContract.entities( issuer.replace( 'did:lac:main:', '' ).replace( 'did:lac:openprotest:', '' ) ) ).status === 1;
 			return validation;
 		}
 		if( ( await tlContract.entities( rootOfTrust[index + 1].address ) ).status <= 0 ) return validation;

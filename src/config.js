@@ -11,6 +11,7 @@ export default {
 		}
 	},
 	network: {
+		name: process.env.NETWORK_NAME || 'main',
 		rpc: process.env.NETWORK_RPC || "https://writer.lacchain.net",
 		nodeAddress: process.env.NODE_ADDRESS,
 		expiration: process.env.NODE_EXPIRATION
@@ -34,5 +35,8 @@ export default {
 	},
 	logger: {
 		level: process.env.LOGGER_LEVEL || 'error'
+	},
+	mailbox: {
+		did: process.env.MAILBOX_DID || "did:lac:main:0x5c3968542ca976bec977270d3fe980dd4742865e"
 	}
 }

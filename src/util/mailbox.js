@@ -2,15 +2,15 @@ import moment from "moment";
 import axios from "axios";
 import jwt from "did-jwt";
 import { encrypt } from "./didcomm.js";
-
-const MAILBOX_DID = "did:lac:main:0x5c3968542ca976bec977270d3fe980dd4742865e";
-
+import config from "../config.js";
+import { resolve } from "./did.js";
 const { createJWT, ES256KSigner } = jwt;
 
 export async function sendVC( sender, recipientDID, message ) {
-	const userDID = `did:lac:main:${sender.address}`;
+	const userDID = `did:lac:${config.network.name}:${sender.address}`;
+	const endpoint = await resolve( config.mailbox.did ).then( did => did.service[0].serviceEndpoint );
 	const token = await createJWT(
-		{ sub: userDID, aud: MAILBOX_DID, exp: moment().add( 1, 'days' ).valueOf() },
+		{ sub: userDID, aud: config.mailbox.did, exp: moment().add( 1, 'days' ).valueOf() },
 		{ issuer: userDID, signer: ES256KSigner( sender.privateKey ) },
 		{ alg: 'ES256K' }
 	);
@@ -19,7 +19,7 @@ export async function sendVC( sender, recipientDID, message ) {
 
 	const envelope = {
 		"type": "https://didcomm.org/routing/2.0/forward",
-		"to": [MAILBOX_DID],
+		"to": [config.mailbox.did],
 		"expires_time": 1516385931,
 		"body": {
 			"next": recipientDID,
@@ -28,8 +28,8 @@ export async function sendVC( sender, recipientDID, message ) {
 			]
 		}
 	}
-	const encryptedToMailbox = await encrypt( envelope, sender.encryptionKey, MAILBOX_DID, false );
-	return await axios.post( 'https://mailbox.lacchain.net/vc', encryptedToMailbox, {
+	const encryptedToMailbox = await encrypt( envelope, sender.encryptionKey, config.mailbox.did, false );
+	return await axios.post( endpoint + '/vc', encryptedToMailbox, {
 		maxContentLength: Infinity,
 		maxBodyLength: Infinity, headers: { token } } );
 }

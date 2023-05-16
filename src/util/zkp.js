@@ -6,6 +6,7 @@ import credentialContext from "./contexts/credentialsContext.json";
 import trustedContext from "./contexts/trusted.json";
 import vaccinationContext from "./contexts/vaccination.json";
 import { findVerificationMethod, resolve } from "./did.js";
+import config from "../config.js";
 
 const documents = {
   "https://w3id.org/security/bbs/v1": bbsContext,
@@ -15,7 +16,7 @@ const documents = {
 };
 
 export async function bbsProof(issuer, vc ) {
-  const issuerDocument = await resolve( `did:lac:main:${issuer.address}` );
+  const issuerDocument = await resolve( `did:lac:${config.network.name}:${issuer.address}` );
   const documentLoader = jsonld.extendContextLoader(uri => {
     if( uri.startsWith( 'did' ) ) return issuerDocument;
 
@@ -31,7 +32,7 @@ export async function bbsProof(issuer, vc ) {
   const verificationMethod = await findVerificationMethod( issuerDocument, issuer.bbsKey.publicKey );
   const keyPair = await new bbs.Bls12381G2KeyPair({
         "id": verificationMethod.id,
-        "controller": `did:lac:main:${issuer.address}`,
+        "controller": `did:lac:${config.network.name}:${issuer.address}`,
         "privateKeyBase58": issuer.bbsKey.privateKey,
         "publicKeyBase58": issuer.bbsKey.publicKey
       }

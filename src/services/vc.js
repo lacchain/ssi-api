@@ -29,7 +29,7 @@ export default class VCService {
       type: "EcdsaSecp256k1Signature2019",
       created: moment().toISOString(),
       proofPurpose: "assertionMethod",
-      verificationMethod: `did:lac:main:${issuerAddress}#vm-0`,
+      verificationMethod: `did:lac:${config.network.name}:${issuerAddress}#vm-0`,
       domain: verifier,
       proofValue: signature
     }];
@@ -79,7 +79,7 @@ export default class VCService {
     rootOfTrust.push( {
       type: 'Issuer',
       name: issuerName,
-      detail: vc.issuer.replace( 'did:lac:main:', '' ),
+      detail: vc.issuer.replace( 'did:lac:main:', '' ).replace('did:lac:openprotest:', ''),
       valid: result.issuerSignatureValid
     } );
     result.rootOfTrust = rootOfTrust;

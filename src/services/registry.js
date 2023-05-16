@@ -30,7 +30,9 @@ export default class RegistryService {
       new ethers.Contract( registry, CREDENTIAL_REGISTRY_GAS.abi, signer ) :
       new ethers.Contract( registry, CREDENTIAL_REGISTRY.abi, signer );
 
-    // await credentialRegistry.grantRole( ISSUER_ROLE, receipt.contractAddress );
+    await credentialRegistry.grantRole( ISSUER_ROLE, receipt.contractAddress ).catch( err => {
+      console.log( err );
+    } );
 
     return {
       address: receipt.contractAddress,

@@ -28,6 +28,7 @@ export async function sendVC( sender, recipientDID, message ) {
 			]
 		}
 	}
+	process.env['NODE_TLS_REJECT_UNAUTHORIZED'] = 0;
 	const encryptedToMailbox = await encrypt( envelope, sender.encryptionKey, config.mailbox.did, false );
 	return await axios.post( endpoint + '/vc', encryptedToMailbox, {
 		maxContentLength: Infinity,

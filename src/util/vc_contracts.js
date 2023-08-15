@@ -63,11 +63,17 @@ export const getRootOfTrust = async vc => {
 	if( !vc.trustedList ) return [];
 	let tlContract = new ethers.Contract( vc.trustedList, TL_CONTRACT.abi, signer );
 
+	const entity = await tlContract.entities( vc.issuer.replace( 'did:lac:main:', '' ).replace( 'did:lac:openprotest:', '' ) );
+	let parent = await tlContract.parent();
+
 	const rootOfTrust = [{
+		address: vc.issuer.replace( 'did:lac:main:', '' ).replace( 'did:lac:openprotest:', '' ),
+		name: entity.name
+	}, {
 		address: vc.trustedList,
 		name: await tlContract.name()
 	}];
-	let parent = await tlContract.parent();
+
 	for( const index of [1, 2, 3, 4, 5, 6] ) {
 		const contract = new ethers.Contract( parent, TL_CONTRACT.abi, signer );
 		try {

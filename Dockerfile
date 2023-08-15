@@ -1,4 +1,4 @@
-FROM node:14.4
+FROM node:14.17
 WORKDIR /app
 COPY ./package*.json ./
 RUN yarn install

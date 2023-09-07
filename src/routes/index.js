@@ -1,5 +1,5 @@
 import Router from "./router.js";
-import swaggerDocument from '../resources/swagger.json';
+import swaggerDocument from '../resources/swagger.json' assert { type: "json" };
 
 export default class IndexRouter extends Router {
 

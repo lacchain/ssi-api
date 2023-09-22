@@ -1,6 +1,11 @@
 import Router from "./router.js";
 import { vcService } from "../services/index.js";
-import { buildRedClaraCredential, buildVerifiablePresentation, buildW3CVaccinationCredential } from "../util/vc.js";
+import {
+  buildFAirLACCredential,
+  buildRedClaraCredential,
+  buildVerifiablePresentation,
+  buildW3CVaccinationCredential
+} from "../util/vc.js";
 import config from "../config.js";
 import APIError from "../util/error.js";
 import { buildCediaVC, buildCUDIVC, buildRedClaraVC, buildSerenaVC } from "../util/pdf.js";
@@ -102,6 +107,18 @@ export default class VCRouter extends Router {
   async issueRedClara( req ) {
     const { claimsVerifier, trustedList, data } = req.body;
     const credential = buildRedClaraCredential( config.account, data, trustedList );
+    const pdf = await buildRedClaraVC( credential );
+    const vc = await vcService.issue( credential, claimsVerifier );
+    const presentation = buildVerifiablePresentation( credential, pdf );
+    await sendVC( config.account, vc.data.credentialSubject.id, presentation ).catch(e=>{
+      console.error('err', e.message)
+    });
+    return { id: vc._id };
+  }
+
+  async issueFAirLAC( req ) {
+    const { data } = req.body;
+    const credential = buildFAirLACCredential( config.account, data );
     const pdf = await buildRedClaraVC( credential );
     const vc = await vcService.issue( credential, claimsVerifier );
     const presentation = buildVerifiablePresentation( credential, pdf );

@@ -45,6 +45,18 @@ export async function buildRedClaraVC( vc ) {
   return new Buffer(await pdfDoc.save()).toString('base64');
 }
 
+export async function buildFAirLACVC( vc ) {
+  const { credentialSubject: subject } = vc;
+  const file = `${path.resolve()}/src/util/fairlac.pdf`;
+  const pdfDoc = await pdf.PDFDocument.load( fs.readFileSync( file ) );
+  const form = pdfDoc.getForm();
+
+  form.getTextField( 'name' ).setText( `${subject.attendant.givenName} ${subject.attendant.familyName}`.toUpperCase() );
+  form.flatten();
+
+  return new Buffer(await pdfDoc.save()).toString('base64');
+}
+
 
 export async function buildSerenaVC( vc ) {
   const { credentialSubject: subject } = vc;

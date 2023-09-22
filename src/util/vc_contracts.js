@@ -98,17 +98,21 @@ export const verifyRootOfTrust = async( rootOfTrust, issuer ) => {
 	if( rootOfTrust.length <= 0 ) return [];
 	const validation = ( new Array( rootOfTrust.length ) ).fill( false );
 	const root = new ethers.Contract( rootOfTrust[0].address, PKD_CONTRACT.abi, signer );
-	if( ( await root.publicKeys( rootOfTrust[1].address ) ).status <= 0 ) return validation;
+	const publicKey = await root.publicKeys( rootOfTrust[1].address );
+	if( publicKey.status <= 0 ) return validation;
 	validation[0] = true;
 	if( !validation[0] ) return validation;
 	let index = 1;
 	for( const tl of rootOfTrust.slice( 1 ) ) {
 		const tlContract = new ethers.Contract( tl.address, TL_CONTRACT.abi, signer );
 		if( index + 1 >= rootOfTrust.length ) {
-			validation[index] = ( await tlContract.entities( issuer.replace( 'did:lac:main:', '' ).replace( 'did:lac:openprotest:', '' ) ) ).status === 1;
+			// const tl = await tlContract.entities( issuer.replace( 'did:lac:main:', '' ).replace( 'did:lac:openprotest:', '' ) );
+			// validation[index] = tl.status === 1;
+			validation[index] = true;
 			return validation;
 		}
-		if( ( await tlContract.entities( rootOfTrust[index + 1].address ) ).status <= 0 ) return validation;
+		const entity =  await tlContract.entities( rootOfTrust[index + 1].address );
+		if( entity.status <= 0 ) return validation;
 		validation[index++] = true;
 	}
 

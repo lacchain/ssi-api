@@ -50,7 +50,7 @@ export default class PKDService {
     const contract = config.network.nodeAddress ?
       new ethers.Contract( pkd.address, PKD_CONTRACT_GAS.abi, signer ) :
       new ethers.Contract( pkd.address, PKD_CONTRACT.abi, signer );
-    const tx = await contract.register( address, did, expires );
+    const tx = await contract.register( address, did, expires, { gasLimit: 1000000 } );
     pkd.entities.push( address );
     await pkd.save();
     return { hash: tx.hash };

@@ -107,6 +107,40 @@ export function buildRedClaraCredential( issuer, data, trustedList ) {
 	};
 }
 
+export function buildFAirLACCredential( issuer, data ) {
+	const issuanceDate = moment();
+	const expirationDate = issuanceDate.clone().add( 2, 'years' );
+	const { program, evaluationDate, subject } = data;
+	return {
+		'@context': [
+			'https://www.w3.org/2018/credentials/v1',
+			`https://www.lacchain.net/credentials/library/education/4e6c312cd8e6b18116fe3fd2e9b6e5df810afe0a716c1c511ef6c19cb8554578/v1`
+		],
+		"id": `urn:uuid:${uuid.uuid()}`,
+		type: ['VerifiableCredential', 'Diploma'],
+		issuer: `did:lac:${config.network.name}:${issuer.address}`,
+		issuanceDate: issuanceDate.toISOString(),
+		expirationDate: expirationDate.toISOString(),
+		credentialSubject: {
+			id: subject.did,
+			givenName: subject.givenName,
+			familyName: subject.familyName,
+			title: subject.title,
+			company: subject.company,
+			email: subject.email,
+			holds: {
+				role: subject.role,
+				country: subject.country,
+				category: subject.category,
+				program: program,
+				evaluationDate: evaluationDate,
+				url: "https://fairlac.iadb.org",
+				modality: "virtual"
+			}
+		}
+	}
+}
+
 export function buildVerifiablePresentation( credential, attachment ) {
 	return {
 		"@context": ["https://www.w3.org/2018/credentials/v1"],

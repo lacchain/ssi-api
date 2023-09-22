@@ -68,20 +68,20 @@ export default class VCService {
 
     const issuersChain = await getRootOfTrust( vc );
     const verification = await verifyRootOfTrust( issuersChain, vc.issuer );
-    const issuerName = await getIssuerName( vc );
+    // const issuerName = await getIssuerName( vc );
     const rootOfTrust = issuersChain.map( ( rot, i ) => ( {
-          type: i === 0 ? 'Root PKD' : 'Trusted List',
+          type: i === 0 ? 'Root PKD' : i === issuersChain.length - 1 ? 'Entity' : 'Trusted List',
           name: rot.name,
           detail: rot.address,
           valid: verification[i]
         } )
     );
-    rootOfTrust.push( {
+    /*rootOfTrust.push( {
       type: 'Issuer',
       name: issuerName,
       detail: vc.issuer.replace( 'did:lac:main:', '' ).replace('did:lac:openprotest:', ''),
       valid: result.issuerSignatureValid
-    } );
+    } );*/
     result.rootOfTrust = rootOfTrust;
 
     return result;
